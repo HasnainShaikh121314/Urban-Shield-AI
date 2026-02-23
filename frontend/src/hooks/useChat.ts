@@ -1,4 +1,4 @@
-// frontend/src/hooks/useChat.ts
+// src/hooks/useChat.ts
 import { useState, useCallback } from 'react';
 import { floodAPI } from '../services/api';
 
@@ -6,12 +6,7 @@ interface Message {
   text: string;
   isUser: boolean;
   timestamp: Date;
-  sources?: Array<{
-    agency: string;
-    document: string;
-    date: string;
-    verified: boolean;
-  }>;
+  sources?: any[];
 }
 
 export function useChat() {
@@ -32,30 +27,14 @@ export function useChat() {
     setError(null);
 
     try {
-      // Get location if available
-      let location;
-      if (navigator.geolocation) {
-        try {
-          const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
-          });
-          location = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-        } catch (e) {
-          console.log('Location permission denied or unavailable');
-        }
-      }
-
-      const response = await floodAPI.sendChatMessage(text, location);
+      const response = await floodAPI.sendChatMessage(text);
       
-      // Add bot response - sources will be stored but not displayed as "Document X"
+      // Add bot response
       const botMessage: Message = {
-        text: response.response,
+        text: response.response || "I couldn't process your request.",
         isUser: false,
         timestamp: new Date(),
-        sources: response.sources, // Keep sources for reference but we'll show custom text
+        sources: response.sources || []
       };
       
       setMessages(prev => [...prev, botMessage]);
