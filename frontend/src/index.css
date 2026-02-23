@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Roboto+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 50% 98%;
+    --foreground: 220 20% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 20%;
+
+    --primary: 224 80% 24%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 174 56% 47%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 30% 95%;
+    --muted-foreground: 220 10% 46%;
+
+    --accent: 37 97% 52%;
+    --accent-foreground: 220 20% 14%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 25% 88%;
+    --input: 214 25% 88%;
+    --ring: 224 80% 24%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --risk-low: 142 71% 45%;
+    --risk-moderate: 48 96% 53%;
+    --risk-high: 25 95% 53%;
+    --risk-severe: 0 72% 51%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(224 80% 24%), hsl(210 70% 35%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 50% 97%));
+    --gradient-bg: linear-gradient(180deg, hsl(210 50% 98%) 0%, hsl(210 60% 95%) 100%);
+    --gradient-teal: linear-gradient(135deg, hsl(174 56% 47%), hsl(174 56% 38%));
+
+    --shadow-card: 0 4px 24px -4px hsl(224 80% 24% / 0.08);
+    --shadow-card-hover: 0 8px 32px -4px hsl(224 80% 24% / 0.14);
+    --shadow-glow-teal: 0 0 24px hsl(174 56% 47% / 0.3);
+    --shadow-glow-blue: 0 0 24px hsl(224 80% 24% / 0.2);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 95%;
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 95%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 95%;
+    --primary: 210 60% 60%;
+    --primary-foreground: 222 47% 6%;
+    --secondary: 174 56% 47%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 217 33% 15%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 37 97% 52%;
+    --accent-foreground: 220 20% 14%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 18%;
+    --input: 217 33% 18%;
+    --ring: 210 60% 60%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background: var(--gradient-bg);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .card-elevated {
+    @apply bg-card rounded-xl border border-border;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .card-elevated:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
+
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .gradient-teal {
+    background: var(--gradient-teal);
+  }
+
+  .glow-teal {
+    box-shadow: var(--shadow-glow-teal);
+  }
+  .glow-blue {
+    box-shadow: var(--shadow-glow-blue);
+  }
+
+  .text-gradient-hero {
+    background: linear-gradient(135deg, hsl(210 40% 98%), hsl(174 56% 70%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .risk-low { color: hsl(var(--risk-low)); }
+  .risk-moderate { color: hsl(var(--risk-moderate)); }
+  .risk-high { color: hsl(var(--risk-high)); }
+  .risk-severe { color: hsl(var(--risk-severe)); }
+
+  .bg-risk-low { background-color: hsl(var(--risk-low)); }
+  .bg-risk-moderate { background-color: hsl(var(--risk-moderate)); }
+  .bg-risk-high { background-color: hsl(var(--risk-high)); }
+  .bg-risk-severe { background-color: hsl(var(--risk-severe)); }
+
+  .font-mono-data {
+    font-family: 'Roboto Mono', monospace;
+  }
+}
