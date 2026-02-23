@@ -20,88 +20,113 @@ const ChatWidget = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || loading) return;
-    
     await sendMessage(input);
     setInput('');
   };
 
   // Suggested questions
   const suggestedQuestions = [
-    "What should I do in flood?",
-    "How to prepare for earthquake?",
+    "Flood safety?",
+    "Earthquake tips?",
     "Emergency contacts",
-    "NDMA guidelines"
+    "NDMA guide"
   ];
 
   if (!isOpen) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-110 z-50"
+        className="fixed bottom-4 right-4 bg-gradient-to-r from-blue-700 to-teal-600 text-white p-3 rounded-full shadow-lg hover:from-blue-800 hover:to-teal-700 z-50 transition-all hover:scale-110"
+        title="Ask UrbanShield AI"
       >
-        <Shield className="h-6 w-6" />
+        <img 
+          src="/src/assets/icon.png" 
+          alt="UrbanShield AI" 
+          className="h-6 w-6 object-contain"
+          onError={(e) => {
+            e.currentTarget.style.display = 'none';
+            const fallback = document.createElement('span');
+            fallback.className = 'text-white font-bold text-lg';
+            fallback.textContent = 'U';
+            e.currentTarget.parentElement?.appendChild(fallback);
+          }}
+        />
       </button>
     );
   }
 
   return (
-    <div className="fixed bottom-4 right-4 w-96 h-[570px] bg-white rounded-lg shadow-2xl flex flex-col z-50 overflow-hidden border border-gray-200">
+    <div className="fixed bottom-4 right-4 w-[90vw] max-w-sm bg-white rounded-lg shadow-xl flex flex-col z-50 border border-gray-200" style={{ height: 'min(80vh, 600px)' }}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-700 to-teal-600 text-white p-4">
-        <div className="flex justify-between items-start">
-          <div>
-            <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5" />
-              <h3 className="font-bold text-lg">Urban Shield AI</h3>
-              <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">Guidy</span>
+      <div className="bg-gradient-to-r from-blue-700 to-teal-600 text-white px-3 py-2 rounded-t-lg flex justify-between items-center">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <img 
+            src="/src/assets/icon.png" 
+            alt="UrbanShield AI" 
+            className="h-6 w-6 object-contain rounded-full bg-white/20 p-1 flex-shrink-0"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              const fallback = document.createElement('span');
+              fallback.className = 'text-white font-bold text-lg';
+              fallback.textContent = 'U';
+              e.currentTarget.parentElement?.appendChild(fallback);
+            }}
+          />
+          <div className="flex flex-col min-w-0">
+            <div className="flex items-center gap-1 flex-wrap">
+              <span className="font-bold text-sm truncate">UrbanShield AI</span>
+              <span className="text-[8px] bg-white/20 px-1 rounded whitespace-nowrap">Guidy</span>
             </div>
-            <p className="text-xs text-white/80 mt-1">
-              NDMA official guidelines • Pakistan
-            </p>
+            <span className="text-[8px] text-white/70 truncate">NDMA Pakistan</span>
           </div>
-          <button 
-            onClick={() => setIsOpen(false)} 
-            className="text-white/80 hover:text-white transition-colors p-1 hover:bg-white/10 rounded"
-          >
-            <X className="h-5 w-5" />
-          </button>
         </div>
+        <button onClick={() => setIsOpen(false)} className="p-0.5 flex-shrink-0">
+          <X className="h-3.5 w-3.5" />
+        </button>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto p-2 space-y-2 bg-gray-50 text-xs">
         {messages.length === 0 && (
-          <div className="text-center py-8">
-            <Shield className="h-12 w-12 text-blue-300 mx-auto mb-3" />
-            <h4 className="text-gray-600 font-medium mb-2">Ask Guidy anything!</h4>
-            <p className="text-xs text-gray-400">
-              Get official NDMA guidelines for floods, earthquakes, and emergencies
-            </p>
+          <div className="text-center py-4">
+            <img 
+              src="/src/assets/icon.png" 
+              alt="UrbanShield AI" 
+              className="h-10 w-10 mx-auto mb-2 opacity-50"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+            <p className="text-[10px] text-gray-500">Ask Guidy about disasters</p>
           </div>
         )}
         
         {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}
-          >
+          <div key={index} className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}>
             {!msg.isUser && (
-              <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center mr-2 flex-shrink-0">
-                <Shield className="h-4 w-4 text-teal-600" />
+              <div className="w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center mr-1 flex-shrink-0">
+                <img 
+                  src="/src/assets/icon.png" 
+                  alt="Guidy" 
+                  className="h-3 w-3 object-contain"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    const fallback = document.createElement('span');
+                    fallback.className = 'text-teal-600 font-bold text-xs';
+                    fallback.textContent = 'U';
+                    e.currentTarget.parentElement?.appendChild(fallback);
+                  }}
+                />
               </div>
             )}
-            <div
-              className={`max-w-xs p-3 rounded-lg ${
-                msg.isUser
-                  ? 'bg-blue-600 text-white rounded-br-none'
-                  : 'bg-white text-gray-800 shadow-sm rounded-bl-none border border-gray-100'
-              }`}
-            >
-              <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.text}</p>
-              
-              {/* Show NDMA Guidelines without emoji for bot messages */}
-              {!msg.isUser && msg.sources && msg.sources.length > 0 && (
-                <div className="mt-2 pt-2 border-t border-gray-200 text-xs text-gray-500">
+            <div className={`max-w-[80%] p-1.5 rounded-lg break-words ${
+              msg.isUser
+                ? 'bg-blue-600 text-white text-[11px] rounded-br-none'
+                : 'bg-white text-gray-800 text-[11px] rounded-bl-none border'
+            }`}>
+              <p className="whitespace-pre-wrap break-words">{msg.text}</p>
+              {!msg.isUser && msg.sources && (
+                <div className="mt-0.5 pt-0.5 border-t border-gray-200 text-[8px] text-gray-400">
                   NDMA Guidelines
                 </div>
               )}
@@ -111,14 +136,21 @@ const ChatWidget = () => {
         
         {loading && (
           <div className="flex justify-start">
-            <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center mr-2">
-              <Shield className="h-4 w-4 text-teal-600 animate-pulse" />
+            <div className="w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center mr-1">
+              <img 
+                src="/src/assets/icon.png" 
+                alt="Guidy" 
+                className="h-3 w-3 object-contain"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
             </div>
-            <div className="bg-white text-gray-800 p-3 rounded-lg shadow-sm">
-              <div className="flex gap-1">
-                <span className="w-2 h-2 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                <span className="w-2 h-2 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                <span className="w-2 h-2 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+            <div className="bg-white p-1.5 rounded-lg">
+              <div className="flex gap-0.5">
+                <span className="w-1 h-1 bg-teal-600 rounded-full animate-bounce"></span>
+                <span className="w-1 h-1 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                <span className="w-1 h-1 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
               </div>
             </div>
           </div>
@@ -126,16 +158,15 @@ const ChatWidget = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Suggested Questions */}
+      {/* Suggestions */}
       {messages.length === 0 && (
-        <div className="px-4 py-2 bg-white border-t border-gray-100">
-          <p className="text-xs text-gray-500 mb-2">Suggested questions:</p>
-          <div className="flex flex-wrap gap-2">
+        <div className="px-2 py-1 bg-white border-t overflow-x-auto">
+          <div className="flex flex-nowrap gap-1 pb-1">
             {suggestedQuestions.map((q, i) => (
               <button
                 key={i}
                 onClick={() => sendMessage(q)}
-                className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-full transition-colors"
+                className="text-[8px] bg-gray-100 px-1.5 py-0.5 rounded-full hover:bg-gray-200 whitespace-nowrap"
               >
                 {q}
               </button>
@@ -145,27 +176,24 @@ const ChatWidget = () => {
       )}
 
       {/* Input */}
-      <form onSubmit={handleSubmit} className="p-3 bg-white border-t border-gray-200">
-        <div className="flex items-center gap-2">
+      <form onSubmit={handleSubmit} className="p-1.5 bg-white border-t">
+        <div className="flex gap-1">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask Guidy..."
-            className="flex-1 p-2.5 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent px-4"
+            className="flex-1 p-1 text-[10px] border rounded-full px-2 focus:outline-none focus:ring-1 focus:ring-teal-500"
             disabled={loading}
           />
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="p-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="p-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-full disabled:opacity-50 flex-shrink-0"
           >
-            <Send className="h-4 w-4" />
+            <Send className="h-3 w-3" />
           </button>
         </div>
-        <p className="text-xs text-center text-gray-400 mt-2">
-          Following NDMA (National Disaster Management Authority) guidelines
-        </p>
       </form>
     </div>
   );
