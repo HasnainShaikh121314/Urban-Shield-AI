@@ -472,13 +472,5 @@ def get_recommendations(flood_prediction, flood_category, weather_alerts):
     return unique_recs[:5]
 
 if __name__ == '__main__':
-    print("\n" + "="*60)
-    print("🚀 Starting FloodGuard AI Backend")
-    print("="*60)
-    print(f"📁 Flood Prediction Models: {'✅ Loaded' if model is not None else '❌ Not Loaded'}")
-    print(f"📚 RAG Chatbot Status: {'✅ Ready' if CHATBOT_AVAILABLE and index is not None and len(all_chunks) > 0 else '⚠️ Initializing'}")
-    if CHATBOT_AVAILABLE and index is not None and len(all_chunks) > 0:
-        print(f"   - Document chunks: {len(all_chunks)}")
-    print(f"📍 Server will run on: http://localhost:5000")
-    print("="*60 + "\n")
+
     app.run(debug=True, port=5000)
