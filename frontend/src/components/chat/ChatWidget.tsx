@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChat } from '../../hooks/useChat';
 import { Shield, X, Send } from 'lucide-react';
+import icon from '../assets/icon.png'; // ✅ Import the image
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,18 +39,12 @@ const ChatWidget = () => {
         onClick={() => setIsOpen(true)}
         className="fixed bottom-4 right-4 bg-gradient-to-r from-blue-700 to-teal-600 text-white p-3 rounded-full shadow-lg hover:from-blue-800 hover:to-teal-700 z-50 transition-all hover:scale-110"
         title="Ask UrbanShield AI"
+        aria-label="Open chat"
       >
         <img 
-          src="/src/assets/icon.png" 
+          src={icon} 
           alt="UrbanShield AI" 
           className="h-6 w-6 object-contain"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-            const fallback = document.createElement('span');
-            fallback.className = 'text-white font-bold text-lg';
-            fallback.textContent = 'U';
-            e.currentTarget.parentElement?.appendChild(fallback);
-          }}
         />
       </button>
     );
@@ -61,16 +56,9 @@ const ChatWidget = () => {
       <div className="bg-gradient-to-r from-blue-700 to-teal-600 text-white px-3 py-2 rounded-t-lg flex justify-between items-center">
         <div className="flex items-center gap-2 min-w-0 flex-1">
           <img 
-            src="/src/assets/icon.png" 
+            src={icon}
             alt="UrbanShield AI" 
             className="h-6 w-6 object-contain rounded-full bg-white/20 p-1 flex-shrink-0"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              const fallback = document.createElement('span');
-              fallback.className = 'text-white font-bold text-lg';
-              fallback.textContent = 'U';
-              e.currentTarget.parentElement?.appendChild(fallback);
-            }}
           />
           <div className="flex flex-col min-w-0">
             <div className="flex items-center gap-1 flex-wrap">
@@ -80,7 +68,11 @@ const ChatWidget = () => {
             <span className="text-[8px] text-white/70 truncate">NDMA Pakistan</span>
           </div>
         </div>
-        <button onClick={() => setIsOpen(false)} className="p-0.5 flex-shrink-0">
+        <button 
+          onClick={() => setIsOpen(false)} 
+          className="p-0.5 flex-shrink-0 hover:bg-white/10 rounded transition-colors"
+          aria-label="Close chat"
+        >
           <X className="h-3.5 w-3.5" />
         </button>
       </div>
@@ -90,12 +82,9 @@ const ChatWidget = () => {
         {messages.length === 0 && (
           <div className="text-center py-4">
             <img 
-              src="/src/assets/icon.png" 
+              src={icon}
               alt="UrbanShield AI" 
               className="h-10 w-10 mx-auto mb-2 opacity-50"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
             />
             <p className="text-[10px] text-gray-500">Ask Guidy about disasters</p>
           </div>
@@ -106,16 +95,9 @@ const ChatWidget = () => {
             {!msg.isUser && (
               <div className="w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center mr-1 flex-shrink-0">
                 <img 
-                  src="/src/assets/icon.png" 
+                  src={icon}
                   alt="Guidy" 
                   className="h-3 w-3 object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    const fallback = document.createElement('span');
-                    fallback.className = 'text-teal-600 font-bold text-xs';
-                    fallback.textContent = 'U';
-                    e.currentTarget.parentElement?.appendChild(fallback);
-                  }}
                 />
               </div>
             )}
@@ -125,7 +107,7 @@ const ChatWidget = () => {
                 : 'bg-white text-gray-800 text-[11px] rounded-bl-none border'
             }`}>
               <p className="whitespace-pre-wrap break-words">{msg.text}</p>
-              {!msg.isUser && msg.sources && (
+              {!msg.isUser && msg.sources && msg.sources.length > 0 && (
                 <div className="mt-0.5 pt-0.5 border-t border-gray-200 text-[8px] text-gray-400">
                   NDMA Guidelines
                 </div>
@@ -138,17 +120,14 @@ const ChatWidget = () => {
           <div className="flex justify-start">
             <div className="w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center mr-1">
               <img 
-                src="/src/assets/icon.png" 
-                alt="Guidy" 
+                src={icon}
+                alt="Guidy is typing" 
                 className="h-3 w-3 object-contain"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
               />
             </div>
             <div className="bg-white p-1.5 rounded-lg">
               <div className="flex gap-0.5">
-                <span className="w-1 h-1 bg-teal-600 rounded-full animate-bounce"></span>
+                <span className="w-1 h-1 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
                 <span className="w-1 h-1 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
                 <span className="w-1 h-1 bg-teal-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
               </div>
@@ -166,7 +145,7 @@ const ChatWidget = () => {
               <button
                 key={i}
                 onClick={() => sendMessage(q)}
-                className="text-[8px] bg-gray-100 px-1.5 py-0.5 rounded-full hover:bg-gray-200 whitespace-nowrap"
+                className="text-[8px] bg-gray-100 px-1.5 py-0.5 rounded-full hover:bg-gray-200 whitespace-nowrap transition-colors"
               >
                 {q}
               </button>
@@ -189,7 +168,8 @@ const ChatWidget = () => {
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="p-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-full disabled:opacity-50 flex-shrink-0"
+            className="p-1 bg-gradient-to-r from-blue-600 to-teal-500 text-white rounded-full disabled:opacity-50 flex-shrink-0 hover:from-blue-700 hover:to-teal-600 transition-all"
+            aria-label="Send message"
           >
             <Send className="h-3 w-3" />
           </button>
