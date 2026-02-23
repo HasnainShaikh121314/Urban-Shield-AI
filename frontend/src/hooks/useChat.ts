@@ -15,9 +15,12 @@ export function useChat() {
   const [error, setError] = useState<string | null>(null);
 
   const sendMessage = useCallback(async (text: string) => {
+    // Prevent empty messages
+    if (!text.trim()) return;
+    
     // Add user message
     const userMessage: Message = {
-      text,
+      text: text.trim(),
       isUser: true,
       timestamp: new Date(),
     };
@@ -27,7 +30,7 @@ export function useChat() {
     setError(null);
 
     try {
-      const response = await floodAPI.sendChatMessage(text);
+      const response = await floodAPI.sendChatMessage(text.trim());
       
       // Add bot response
       const botMessage: Message = {
@@ -39,6 +42,7 @@ export function useChat() {
       
       setMessages(prev => [...prev, botMessage]);
     } catch (err) {
+      console.error('Chat error:', err);
       setError(err instanceof Error ? err.message : 'Failed to send message');
       
       // Add error message
@@ -55,6 +59,7 @@ export function useChat() {
 
   const clearMessages = () => {
     setMessages([]);
+    setError(null);
   };
 
   return { messages, sendMessage, clearMessages, loading, error };
